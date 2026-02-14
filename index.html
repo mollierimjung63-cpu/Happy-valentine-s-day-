@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Happy Valentine's Day 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    background:#fff0f5;
+    color:#ff1493;
+}
+
+/* Soft background image */
+.background{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    opacity:0.12;
+    transition:background-image 1s ease;
+}
+
+/* Center content */
+.content{
+    position:relative;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    transition:opacity 0.6s ease, transform 0.6s ease;
+}
+
+.content.fade-out{
+    opacity:0;
+    transform:scale(0.95);
+}
+
+.content.fade-in{
+    opacity:1;
+    transform:scale(1);
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+h2{
+    font-weight:400;
+    margin-top:10px;
+}
+
+/* Centered page image */
+.page-image{
+    width:240px;
+    border-radius:20px;
+    margin:20px 0;
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Buttons */
+button{
+    margin-top:25px;
+    padding:12px 30px;
+    border-radius:30px;
+    border:none;
+    background:#ff1493;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#ff69b4;
+}
+
+/* Floating pink hearts */
+.heart{
+    position:fixed;
+    bottom:-10px;
+    font-size:18px;
+    animation:floatUp linear infinite;
+    opacity:0.7;
+}
+
+@keyframes floatUp{
+    to{
+        transform:translateY(-110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+<div class="background" id="bg"></div>
+
+<div class="content" id="content"></div>
+
+<script>
+const pages = [
+{
+    image:"img/intro.jpg",
+    title:"Baby Somi 💖",
+    text:"I made something for you..."
+},
+{
+    image:"img/her.jpg",
+    title:"Happy Valentine's Day 💗",
+    text:"Every day with you feels magical.I wouldn't waste a single a second of the day without you."
+},
+{
+    image:"img/memory1.jpg",
+    title:"June 28, 2024 ❤️",
+    text:"The beginning of something beautiful,where everything started. I don't regret a single thing."
+},
+{
+    image:"img/flowers.jpg",
+    title:"You are my calm 🌸",
+    text:"Even when your thoughts get loud... I am here. Always there for you no matter what happens."
+},
+{
+    image:"img/final.jpg",
+    title:"Will you continue being my Valentine? 💍",
+    text:"",
+    final:true
+}
+];
+
+let index = 0;
+const bg = document.getElementById("bg");
+const content = document.getElementById("content");
+const music = document.getElementById("music");
+
+function render(){
+    const page = pages[index];
+
+    content.innerHTML = `
+        <h1>${page.title}</h1>
+        <img src="${page.image}" class="page-image">
+        <h2>${page.text}</h2>
+        ${
+            page.final
+            ? `<button onclick="yes()">Yes 💖</button>
+               <button onclick="move(this)">No 😢</button>`
+            : `<button onclick="next()">Next</button>`
+        }
+    `;
+}
+
+function next(){
+    content.classList.add("fade-out");
+
+    setTimeout(()=>{
+        index++;
+        if(index < pages.length){
+            render();
+            content.classList.remove("fade-out");
+            content.classList.add("fade-in");
+
+            setTimeout(()=>{
+                content.classList.remove("fade-in");
+            },600);
+        }
+    },600);
+}
+
+function move(btn){
+    btn.style.position="absolute";
+    btn.style.left=Math.random()*70+"%";
+    btn.style.top=Math.random()*70+"%";
+}
+
+function yes(){
+    content.classList.add("fade-out");
+    setTimeout(()=>{
+        content.innerHTML="<h1>Forever yours 💖. Please be mine always and forever more. Happy valentie's day Baby❤️</h1>";
+        content.classList.remove("fade-out");
+        content.classList.add("fade-in");
+    },500);
+}
+
+/* Play music after first click */
+document.body.addEventListener("click",()=>{
+    music.play();
+},{once:true});
+
+/* Generate pink floating hearts */
+setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=4+Math.random()*3+"s";
+    heart.innerHTML="💗";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),7000);
+},600);
+
+render();
+</script>
+
+</body>
+</html>
